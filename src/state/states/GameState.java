@@ -3,6 +3,8 @@ package state.states;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
+import game.CameraSystem;
+import utilities.Utility;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,6 +26,8 @@ import java.awt.event.KeyEvent;
  */
 public class GameState extends State
 {
+    private CameraSystem cameraSystem;
+
     public GameState(StateManager stateManager)
     {
         super(stateManager);
@@ -33,12 +37,13 @@ public class GameState extends State
     @Override
     public void init()
     {
-        // TODO: Initialize power, clock, animatronics, office view, cameras
+        cameraSystem = new CameraSystem();
     }
 
     @Override
     public void update()
     {
+        cameraSystem.update();
         // TODO:
         // power.update();
         // clock.update();
@@ -57,9 +62,18 @@ public class GameState extends State
         g.setColor(new Color(30, 30, 30));
         g.fillRect(0, 0, w, h);
 
+        // Title
+        g.setColor(new Color(180, 0, 0));
+        g.setFont(new Font("Serif", Font.BOLD, 24));
+        Utility.drawCentered(g, "OFFICE VIEW", h / 2 - 30);
+
+        // Prompt
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        drawCentered(g, "Night 1 - Office goes here", h / 2);
+        g.setFont(new Font("Serif", Font.PLAIN, 12));
+        Utility.drawCentered(g, "Hover at the bottom to check the Cameras.", h / 2 + 10);
+
+
+        cameraSystem.draw(g);
     }
 
     @Override
@@ -68,6 +82,11 @@ public class GameState extends State
         if(key == KeyEvent.VK_F1)
         {
             stateManager.setState(StateManager.TITLE_STATE);
+        }
+
+        if(key == KeyEvent.VK_F2)
+        {
+            stateManager.setState(StateManager.GAME_STATE);
         }
 
         if(key == KeyEvent.VK_F3)
@@ -79,17 +98,13 @@ public class GameState extends State
         {
             stateManager.setState(StateManager.WIN_STATE);
         }
+
+        cameraSystem.keyPressed(key);
     }
+
+    @Override public void mouseMoved(int x, int y) { cameraSystem.mouseMoved(x, y); }
+    @Override public void mouseClicked(int x, int y) { cameraSystem.mouseClicked(x, y); }
 
     @Override
-    public void keyReleased(int key)
-    {
-        // TODO: Release door/light held keys
-    }
-
-    private void drawCentered(Graphics2D g, String text, int y)
-    {
-        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(text)) / 2;
-        g.drawString(text, x, y);
-    }
+    public void keyReleased(int key) {}
 }

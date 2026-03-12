@@ -4,11 +4,9 @@ import state.StateManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
+import java.awt.event.*;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener
+public class GamePanel extends JPanel implements Runnable, KeyListener, MouseMotionListener, MouseListener
 {
     // GLOBAL SCREEN SETTINGS
     public static final int WIDTH  = 1280;
@@ -20,25 +18,24 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     private Thread gameThread;
     private boolean running;
 
-    // DOUBLE BUFFER BEFORE DISPLAYING THE RENDERED SCREEN
-    private BufferedImage image;
-    private Graphics2D g2d;
-
     // CLASS THAT HANDLES THE CHANGING OF STATES IN THE GAME
     private StateManager stateManager;
 
     GamePanel()
     {
         super();
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.requestFocus();
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
     @Override
     public void addNotify()
     {
         super.addNotify();
+        addMouseMotionListener(this);
+        addMouseListener(this);
 
         if(gameThread == null)
         {
@@ -50,55 +47,48 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 
     private void init()
     {
-        // SET UP BUFFER TO DRAW ON
-        image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g2d = (Graphics2D) image.getGraphics();
-
+        stateManager = new StateManager();
         running = true;
-        stateManager = new StateManager(); // Boots into TITLE_STATE
     }
 
-    @SuppressWarnings("BusyWait")
     @Override
     public void run()
     {
         init();
-        long start;
-        long elapsed;
-        long wait;
 
-        while (running)
+        double drawInterval = 1_000_000_000.0 / FPS;
+        double delta = 0;
+
+        long lastUpdate = System.nanoTime();
+        long currentTime;
+
+        while(running)
         {
-            start = System.nanoTime();
-            update();
-            draw();
-            drawToScreen();
+            currentTime = System.nanoTime();
 
-            long targetTime = 1000 / FPS;
-            elapsed = System.nanoTime() - start;
-            wait = targetTime - elapsed / 1000000;
-            if (wait < 0) wait = 5;
+            delta += (currentTime - lastUpdate) / drawInterval;
+            lastUpdate = currentTime;
 
-            try
+            // ONLY UPDATE AND DRAW ONCE A FULL FRAME TIME HAS ACCUMULATED
+            if(delta >= 1)
             {
-                Thread.sleep(wait);
-            }
-            catch (InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
+                update();
+                repaint();
+                delta--;
             }
         }
     }
 
     private void update() { stateManager.update(); }
-    private void draw() { stateManager.draw(g2d); }
 
-    // Blit the completed BufferedImage to the actual screen, scaled up
-    private void drawToScreen()
+    @Override
+    public void paintComponent(Graphics g)
     {
-        Graphics g = getGraphics();
-        g.drawImage(image, 0, 0, WIDTH, HEIGHT, null);
-        g.dispose();
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D) g;
+        stateManager.draw(g2);
+        g2.dispose();
     }
 
     @Override
@@ -112,6 +102,32 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
     {
         if(e != null) stateManager.keyReleased(e.getKeyCode());
     }
+
+    @Override
+    public void mousePressed(MouseEvent e) { stateManager.mouseClicked(e.getX(), e.getY()); }
+
+    @Override
+    public void mouseMoved(MouseEvent e) { stateManager.mouseMoved(e.getX(), e.getY()); }
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {}
+
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {}
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {}
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {}
+
+    @Override
+    public void mouseDragged(MouseEvent e)
+    {}
 
     @Override
     public void keyTyped(KeyEvent e)

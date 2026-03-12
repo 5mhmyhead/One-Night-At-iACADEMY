@@ -14,4 +14,7 @@ public abstract class State {
 
     public abstract void keyPressed(int key);
     public abstract void keyReleased(int key);
+
+    public abstract void mouseMoved(int x, int y);
+    public abstract void mouseClicked(int x, int y);
 }

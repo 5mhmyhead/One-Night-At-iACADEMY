@@ -3,6 +3,7 @@ package state.states;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
+import utilities.Utility;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -41,11 +42,11 @@ public class LoseState extends State
 
         g.setColor(new Color(200, 0, 0));
         g.setFont(new Font("Serif", Font.BOLD, 28));
-        drawCentered(g, "GAME OVER", h / 2 - 20);
+        Utility.drawCentered(g, "GAME OVER", h / 2 - 20);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Serif", Font.PLAIN, 12));
-        drawCentered(g, "Press R to try again", h / 2 + 20);
+        Utility.drawCentered(g, "Press R to try again", h / 2 + 20);
     }
 
     @Override
@@ -75,9 +76,6 @@ public class LoseState extends State
     @Override
     public void keyReleased(int key) {}
 
-    private void drawCentered(Graphics2D g, String text, int y)
-    {
-        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(text)) / 2;
-        g.drawString(text, x, y);
-    }
+    @Override public void mouseMoved(int x, int y) {}
+    @Override public void mouseClicked(int x, int y) {}
 }

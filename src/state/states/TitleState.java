@@ -3,6 +3,7 @@ package state.states;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
+import utilities.Utility;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -44,22 +45,27 @@ public class TitleState extends State
         // Title
         g.setColor(new Color(180, 0, 0));
         g.setFont(new Font("Serif", Font.BOLD, 24));
-        drawCentered(g, "FIVE NIGHTS AT FREDDY'S", h / 2 - 30);
+        Utility.drawCentered(g, "FIVE NIGHTS AT FREDDY'S", h / 2 - 30);
 
         // Prompt
         g.setColor(Color.WHITE);
         g.setFont(new Font("Serif", Font.PLAIN, 12));
-        drawCentered(g, "Press ENTER to start", h / 2 + 10);
+        Utility.drawCentered(g, "Press ENTER to start", h / 2 + 10);
 
         // Night label
         g.setColor(Color.DARK_GRAY);
         g.setFont(new Font("Monospaced", Font.PLAIN, 9));
-        drawCentered(g, "Night 1", h - 20);
+        Utility.drawCentered(g, "Night 1", h - 20);
     }
 
     @Override
     public void keyPressed(int key)
     {
+        if(key == KeyEvent.VK_F1)
+        {
+            stateManager.setState(StateManager.TITLE_STATE);
+        }
+
         if(key == KeyEvent.VK_ENTER || key == KeyEvent.VK_F2)
         {
             stateManager.setState(StateManager.GAME_STATE);
@@ -79,9 +85,6 @@ public class TitleState extends State
     @Override
     public void keyReleased(int key) {}
 
-    private void drawCentered(Graphics2D g, String text, int y)
-    {
-        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(text)) / 2;
-        g.drawString(text, x, y);
-    }
+    @Override public void mouseMoved(int x, int y) {}
+    @Override public void mouseClicked(int x, int y) {}
 }

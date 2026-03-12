@@ -65,4 +65,7 @@ public class StateManager
     // SENDS THE KEY PRESS TO THE CURRENT STATE
     public void keyPressed(int key) { if(states[currentState] != null) states[currentState].keyPressed(key); }
     public void keyReleased(int key) { if(states[currentState] != null) states[currentState].keyReleased(key); }
+
+    public void mouseMoved(int x, int y) { if (states[currentState] != null) states[currentState].mouseMoved(x, y); }
+    public void mouseClicked(int x, int y) { if (states[currentState] != null) states[currentState].mouseClicked(x, y); }
 }

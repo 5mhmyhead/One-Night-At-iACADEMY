@@ -3,6 +3,7 @@ package state.states;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
+import utilities.Utility;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,8 +13,8 @@ import java.awt.event.KeyEvent;
  * Shown when the player survives until 6 AM.
  * Press ENTER to return to the title screen (or later, advance the night).
  */
-public class WinState extends State {
-
+public class WinState extends State
+{
     public WinState(StateManager stateManager)
     {
         super(stateManager);
@@ -40,11 +41,11 @@ public class WinState extends State {
 
         g.setColor(new Color(255, 215, 0));
         g.setFont(new Font("Serif", Font.BOLD, 24));
-        drawCentered(g, "6 AM - YOU SURVIVED!", h / 2 - 20);
+        Utility.drawCentered(g, "6 AM - YOU SURVIVED!", h / 2 - 20);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Serif", Font.PLAIN, 12));
-        drawCentered(g, "Press ENTER to continue", h / 2 + 20);
+        Utility.drawCentered(g, "Press ENTER to continue", h / 2 + 20);
     }
 
     @Override
@@ -64,14 +65,16 @@ public class WinState extends State {
         {
             stateManager.setState(StateManager.LOSE_STATE);
         }
+
+        if(key == KeyEvent.VK_F4)
+        {
+            stateManager.setState(StateManager.WIN_STATE);
+        }
     }
 
     @Override
     public void keyReleased(int key) {}
 
-    private void drawCentered(Graphics2D g, String text, int y)
-    {
-        int x = (GamePanel.WIDTH - g.getFontMetrics().stringWidth(text)) / 2;
-        g.drawString(text, x, y);
-    }
+    @Override public void mouseMoved(int x, int y) {}
+    @Override public void mouseClicked(int x, int y) {}
 }
