@@ -8,11 +8,6 @@ import utilities.Utility;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * WinState.java
- * Shown when the player survives until 6 AM.
- * Press ENTER to return to the title screen (or later, advance the night).
- */
 public class WinState extends State
 {
     public WinState(StateManager stateManager)
@@ -51,25 +46,8 @@ public class WinState extends State
     @Override
     public void keyPressed(int key)
     {
-        if(key == KeyEvent.VK_ENTER || key == KeyEvent.VK_F1)
-        {
+        if(key == KeyEvent.VK_ENTER)
             stateManager.setState(StateManager.TITLE_STATE);
-        }
-
-        if(key == KeyEvent.VK_F2)
-        {
-            stateManager.setState(StateManager.GAME_STATE);
-        }
-
-        if(key == KeyEvent.VK_F3)
-        {
-            stateManager.setState(StateManager.LOSE_STATE);
-        }
-
-        if(key == KeyEvent.VK_F4)
-        {
-            stateManager.setState(StateManager.WIN_STATE);
-        }
     }
 
     @Override

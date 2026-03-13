@@ -1,6 +1,5 @@
-package game;
+package components;
 
-import components.Camera;
 import main.GamePanel;
 import utilities.Utility;
 
@@ -26,12 +25,13 @@ public class CameraSystem
 {
     // --- MONITOR STATE ---
     private boolean monitorUp = false;
+    private boolean wasInHoverZone = false;
 
     // HOVER ZONE - the strip at the bottom of the screen that toggles the monitor
     // MATCHES THE ORIGINAL FNAF BEHAVIOUR
     private static final int HOVER_ZONE_Y      = GamePanel.HEIGHT - 60;
-    private static final int HOVER_ZONE_X_MIN  = (int)(GamePanel.WIDTH * 0.28);
-    private static final int HOVER_ZONE_X_MAX  = (int)(GamePanel.WIDTH * 0.72);
+    private static final int HOVER_ZONE_X_MIN  = (int)(GamePanel.WIDTH * 0.05);
+    private static final int HOVER_ZONE_X_MAX  = (int)(GamePanel.WIDTH * 0.45);
 
     // COOLDOWN PREVENTS THE MONITOR FROM FLICKERING WHEN THE MOUSE CROSSES THE ZONE BORDER
     private int toggleCooldown = 0;
@@ -90,17 +90,13 @@ public class CameraSystem
                 && mouseX <= HOVER_ZONE_X_MAX
                 && mouseY >= HOVER_ZONE_Y;
 
-        // TOGGLE MONITOR WHEN MOUSE ENTERS OR LEAVES THE HOVER ZONE
-        if(inHoverZone && !monitorUp)
+        if(inHoverZone && !wasInHoverZone)
         {
-            monitorUp = true;
+            monitorUp = !monitorUp;
             toggleCooldown = TOGGLE_COOLDOWN_MAX;
         }
-        else if(inHoverZone) // SMALL BUFFER SO IT DOESN'T FLICKER AT THE EDGE
-        {
-            monitorUp = false;
-            toggleCooldown = TOGGLE_COOLDOWN_MAX;
-        }
+
+        wasInHoverZone = inHoverZone;
     }
 
     public void mouseClicked(int mouseX, int mouseY)
@@ -144,7 +140,7 @@ public class CameraSystem
             drawCameraLabel(g);
         }
 
-        drawHoverHint(g);
+        drawHoverZone(g);
     }
 
     private void drawCameraFeed(Graphics2D g)
@@ -215,9 +211,8 @@ public class CameraSystem
         g.drawString(cameras[currentCamera].getName(), 20, 30);
     }
 
-    // SUBTLE HINT AT THE BOTTOM OF THE SCREEN WHEN MONITOR IS DOWN
-    // TELLS THE PLAYER WHERE TO HOVER WITHOUT BEING OBVIOUS
-    private void drawHoverHint(Graphics2D g)
+    // HOVER ZONE AT THE BOTTOM OF THE SCREEN
+    private void drawHoverZone(Graphics2D g)
     {
         g.setColor(HOVER_HINT_COLOR);
         g.fillRect(HOVER_ZONE_X_MIN, HOVER_ZONE_Y,

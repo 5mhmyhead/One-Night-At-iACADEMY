@@ -8,11 +8,6 @@ import utilities.Utility;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * TitleState.java
- * The title/menu screen shown when the game launches.
- * Press ENTER to begin Night 1.
- */
 public class TitleState extends State
 {
     public TitleState(StateManager stateManager)
@@ -61,25 +56,8 @@ public class TitleState extends State
     @Override
     public void keyPressed(int key)
     {
-        if(key == KeyEvent.VK_F1)
-        {
-            stateManager.setState(StateManager.TITLE_STATE);
-        }
-
-        if(key == KeyEvent.VK_ENTER || key == KeyEvent.VK_F2)
-        {
+        if(key == KeyEvent.VK_ENTER)
             stateManager.setState(StateManager.GAME_STATE);
-        }
-
-        if(key == KeyEvent.VK_F3)
-        {
-            stateManager.setState(StateManager.LOSE_STATE);
-        }
-
-        if(key == KeyEvent.VK_F4)
-        {
-            stateManager.setState(StateManager.WIN_STATE);
-        }
     }
 
     @Override

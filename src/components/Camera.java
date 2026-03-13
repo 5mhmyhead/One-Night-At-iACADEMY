@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+// CLASS THAT HOLDS A SINGLE CAMERA FOR THE CAMERA SYSTEM
 public class Camera
 {
     private final String name;

@@ -8,11 +8,6 @@ import utilities.Utility;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * DeadState.java
- * Shown when an animatronic reaches the player.
- * Press R to return to the title screen.
- */
 public class LoseState extends State
 {
     public LoseState(StateManager stateManager)
@@ -52,25 +47,8 @@ public class LoseState extends State
     @Override
     public void keyPressed(int key)
     {
-        if(key == KeyEvent.VK_R || key == KeyEvent.VK_F1)
-        {
+        if(key == KeyEvent.VK_R)
             stateManager.setState(StateManager.TITLE_STATE);
-        }
-
-        if(key == KeyEvent.VK_F2)
-        {
-            stateManager.setState(StateManager.GAME_STATE);
-        }
-
-        if(key == KeyEvent.VK_F3)
-        {
-            stateManager.setState(StateManager.LOSE_STATE);
-        }
-
-        if(key == KeyEvent.VK_F4)
-        {
-            stateManager.setState(StateManager.WIN_STATE);
-        }
     }
 
     @Override

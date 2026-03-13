@@ -69,7 +69,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseMot
             delta += (currentTime - lastUpdate) / drawInterval;
             lastUpdate = currentTime;
 
-            // ONLY UPDATE AND DRAW ONCE A FULL FRAME TIME HAS ACCUMULATED
+            // ONLY UPDATE AND DRAW ONCE A SINGLE FRAME TIME HAS ACCUMULATED
             if(delta >= 1)
             {
                 update();
@@ -78,8 +78,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseMot
             }
         }
     }
-
-    private void update() { stateManager.update(); }
 
     @Override
     public void paintComponent(Graphics g)
@@ -90,6 +88,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseMot
         stateManager.draw(g2);
         g2.dispose();
     }
+
+    private void update() { stateManager.update(); }
 
     @Override
     public void keyPressed(KeyEvent e)
@@ -110,26 +110,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseMot
     public void mouseMoved(MouseEvent e) { stateManager.mouseMoved(e.getX(), e.getY()); }
 
     @Override
-    public void mouseClicked(MouseEvent e)
-    {}
+    public void mouseClicked(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e)
-    {}
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e)
-    {}
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e)
-    {}
+    public void mouseExited(MouseEvent e) {}
 
     @Override
-    public void mouseDragged(MouseEvent e)
-    {}
+    public void mouseDragged(MouseEvent e) {}
 
     @Override
-    public void keyTyped(KeyEvent e)
-    {}
+    public void keyTyped(KeyEvent e) {}
 }

@@ -12,6 +12,7 @@ public abstract class State {
     public abstract void update();
     public abstract void draw(Graphics2D g2);
 
+    // ABSTRACT CLASSES FOR KEYBOARD AND MOUSE INPUT
     public abstract void keyPressed(int key);
     public abstract void keyReleased(int key);
 

@@ -6,6 +6,7 @@ import state.states.TitleState;
 import state.states.WinState;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 // HANDLES SWITCHING BETWEEN AND MOVING THROUGH DIFFERENT STATES DURING GAMEPLAY
 public class StateManager
@@ -57,15 +58,25 @@ public class StateManager
     private void loadState(int state)
     {
         if(state == TITLE_STATE) states[state] = new TitleState(this);
-        if(state == GAME_STATE)  states[state] = new GameState(this);
-        if(state == LOSE_STATE)  states[state] = new LoseState(this);
-        if(state == WIN_STATE)   states[state] = new WinState(this);
+        if(state == GAME_STATE) states[state] = new GameState(this);
+        if(state == LOSE_STATE) states[state] = new LoseState(this);
+        if(state == WIN_STATE) states[state] = new WinState(this);
     }
 
     // SENDS THE KEY PRESS TO THE CURRENT STATE
-    public void keyPressed(int key) { if(states[currentState] != null) states[currentState].keyPressed(key); }
+    public void keyPressed(int key)
+    {
+        // GLOBAL DEBUG KEYS TO MOVE BETWEEN STATES
+        if(key == KeyEvent.VK_F1) { setState(TITLE_STATE); return; }
+        if(key == KeyEvent.VK_F2) { setState(GAME_STATE);  return; }
+        if(key == KeyEvent.VK_F3) { setState(LOSE_STATE);  return; }
+        if(key == KeyEvent.VK_F4) { setState(WIN_STATE);   return; }
+        
+        if(states[currentState] != null) states[currentState].keyPressed(key);
+    }
+
     public void keyReleased(int key) { if(states[currentState] != null) states[currentState].keyReleased(key); }
 
-    public void mouseMoved(int x, int y) { if (states[currentState] != null) states[currentState].mouseMoved(x, y); }
-    public void mouseClicked(int x, int y) { if (states[currentState] != null) states[currentState].mouseClicked(x, y); }
+    public void mouseMoved(int x, int y) { if(states[currentState] != null) states[currentState].mouseMoved(x, y); }
+    public void mouseClicked(int x, int y) { if(states[currentState] != null) states[currentState].mouseClicked(x, y); }
 }

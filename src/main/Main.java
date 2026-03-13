@@ -5,7 +5,6 @@ import javax.swing.*;
 public class Main
 {
     public static JFrame window;
-
     public static void main(String[] args) { new Main().startGame(); }
 
     public void startGame()
@@ -13,10 +12,8 @@ public class Main
         window = new JFrame("NIGHTS AT iACADEMY");
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // TODO: ADD ICON FOR GAME
-        window.setResizable(false);
-
         window.add(new GamePanel());
+        window.setResizable(false);
         window.pack();
 
         window.setLocationRelativeTo(null);
