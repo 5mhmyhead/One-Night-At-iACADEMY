@@ -10,7 +10,7 @@ public class Main
 
     public void startGame()
     {
-        window = new JFrame("FAMILY MATTERS");
+        window = new JFrame("NIGHTS AT iACADEMY");
 
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // TODO: ADD ICON FOR GAME

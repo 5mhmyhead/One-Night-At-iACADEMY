@@ -1,5 +1,6 @@
 package state.states;
 
+import components.Office;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
@@ -27,6 +28,7 @@ import java.awt.event.KeyEvent;
 public class GameState extends State
 {
     private CameraSystem cameraSystem;
+    private Office office;
 
     public GameState(StateManager stateManager)
     {
@@ -38,18 +40,14 @@ public class GameState extends State
     public void init()
     {
         cameraSystem = new CameraSystem();
+        office = new Office();
     }
 
     @Override
     public void update()
     {
         cameraSystem.update();
-        // TODO:
-        // power.update();
-        // clock.update();
-        // for (Animatronic a : animatronics) a.update();
-        // if (clock.isSixAM()) stateManager.setState(StateManager.WIN_STATE);
-        // if (power.isDepleted()) stateManager.setState(StateManager.DEAD_STATE);
+        if(!cameraSystem.isMonitorUp()) office.update();
     }
 
     @Override
@@ -72,7 +70,7 @@ public class GameState extends State
         g.setFont(new Font("Serif", Font.PLAIN, 12));
         Utility.drawCentered(g, "Hover at the bottom to check the Cameras.", h / 2 + 10);
 
-
+        if(!cameraSystem.isMonitorUp()) office.draw(g);
         cameraSystem.draw(g);
     }
 
@@ -100,9 +98,15 @@ public class GameState extends State
         }
 
         cameraSystem.keyPressed(key);
+        office.keyPressed(key);
     }
 
-    @Override public void mouseMoved(int x, int y) { cameraSystem.mouseMoved(x, y); }
+    @Override public void mouseMoved(int x, int y)
+    {
+        cameraSystem.mouseMoved(x, y);
+        if(!cameraSystem.isMonitorUp()) office.mouseMoved(x, y);
+    }
+
     @Override public void mouseClicked(int x, int y) { cameraSystem.mouseClicked(x, y); }
 
     @Override
