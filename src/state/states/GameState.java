@@ -1,5 +1,6 @@
 package state.states;
 
+import components.MaskSystem;
 import main.GamePanel;
 import state.State;
 import state.StateManager;
@@ -7,7 +8,6 @@ import components.CameraSystem;
 import utilities.Utility;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 /**
  * PlayState.java
@@ -27,6 +27,7 @@ import java.awt.event.KeyEvent;
 public class GameState extends State
 {
     private CameraSystem cameraSystem;
+    private MaskSystem mask;
 
     public GameState(StateManager stateManager)
     {
@@ -38,12 +39,14 @@ public class GameState extends State
     public void init()
     {
         cameraSystem = new CameraSystem();
+        mask = new MaskSystem();
     }
 
     @Override
     public void update()
     {
         cameraSystem.update();
+        mask.update();
     }
 
     @Override
@@ -66,7 +69,9 @@ public class GameState extends State
         g.setFont(new Font("Serif", Font.PLAIN, 12));
         Utility.drawCentered(g, "Hover at the bottom to check the Cameras.", h / 2 + 10);
 
-        cameraSystem.draw(g);
+
+        if(!cameraSystem.isMonitorUp()) mask.draw(g);
+        if(!mask.isMaskUp()) cameraSystem.draw(g);
     }
 
     @Override
@@ -77,7 +82,8 @@ public class GameState extends State
 
     @Override public void mouseMoved(int x, int y)
     {
-        cameraSystem.mouseMoved(x, y);
+        if(!mask.isMaskUp()) cameraSystem.mouseMoved(x, y);
+        if(!cameraSystem.isMonitorUp()) mask.mouseMoved(x, y);
     }
 
     @Override public void mouseClicked(int x, int y) { cameraSystem.mouseClicked(x, y); }

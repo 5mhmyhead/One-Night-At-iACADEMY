@@ -23,19 +23,13 @@ import java.awt.event.KeyEvent;
  */
 public class CameraSystem
 {
-    // --- MONITOR STATE ---
     private boolean monitorUp = false;
     private boolean wasInHoverZone = false;
 
-    // HOVER ZONE - the strip at the bottom of the screen that toggles the monitor
-    // MATCHES THE ORIGINAL FNAF BEHAVIOUR
+    // HOVER ZONE DIMENSIONS
     private static final int HOVER_ZONE_Y      = GamePanel.HEIGHT - 60;
     private static final int HOVER_ZONE_X_MIN  = (int)(GamePanel.WIDTH * 0.05);
     private static final int HOVER_ZONE_X_MAX  = (int)(GamePanel.WIDTH * 0.45);
-
-    // COOLDOWN PREVENTS THE MONITOR FROM FLICKERING WHEN THE MOUSE CROSSES THE ZONE BORDER
-    private int toggleCooldown = 0;
-    private static final int TOGGLE_COOLDOWN_MAX = 15; // FRAMES
 
     // --- CAMERA STATE ---
     private Camera[] cameras;
@@ -77,24 +71,17 @@ public class CameraSystem
 
     public void update()
     {
-        if(toggleCooldown > 0) toggleCooldown--;
-    }
 
-    // --- INPUT ---
+    }
 
     public void mouseMoved(int mouseX, int mouseY)
     {
-        if(toggleCooldown > 0) return;
-
         boolean inHoverZone = mouseX >= HOVER_ZONE_X_MIN
                 && mouseX <= HOVER_ZONE_X_MAX
                 && mouseY >= HOVER_ZONE_Y;
 
         if(inHoverZone && !wasInHoverZone)
-        {
             monitorUp = !monitorUp;
-            toggleCooldown = TOGGLE_COOLDOWN_MAX;
-        }
 
         wasInHoverZone = inHoverZone;
     }
@@ -127,8 +114,6 @@ public class CameraSystem
             currentCamera = index;
         }
     }
-
-    // --- DRAWING ---
 
     public void draw(Graphics2D g)
     {
@@ -220,7 +205,7 @@ public class CameraSystem
                 GamePanel.HEIGHT - HOVER_ZONE_Y);
     }
 
-    // --- GETTERS ---
+    // GETTERS
     public boolean isMonitorUp() { return monitorUp; }
     public int getCurrentCamera() { return currentCamera; }
 }
