@@ -5,8 +5,7 @@ import main.GamePanel;
 import state.State;
 import state.StateManager;
 import components.CameraSystem;
-import components.OfficeView;
-import utilities.Utility;
+import components.office.OfficeView;
 
 import java.awt.*;
 

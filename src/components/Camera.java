@@ -1,5 +1,7 @@
 package components;
 
+import utilities.Utility;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -19,15 +21,7 @@ public class Camera
 
     private void loadImage(String imagePath)
     {
-        try
-        {
-            image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream(imagePath)));
-        }
-        catch(IOException | NullPointerException e)
-        {
-            System.out.println("Camera image not found: " + imagePath);
-        }
+        image = Utility.loadImage(imagePath);
     }
 
     public String getName() { return name; }

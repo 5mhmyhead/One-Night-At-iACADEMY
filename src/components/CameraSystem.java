@@ -37,9 +37,9 @@ public class CameraSystem
 
     // BUTTON POSITIONS FOR THE CAMERA SELECTOR UI
     // ADD A NEW ENTRY HERE WHEN YOU ADD A NEW CAMERA
-    private static final int[] BUTTON_X = { 620, 750 };
-    private static final int[] BUTTON_Y = { 580, 580 };
-    private static final int BUTTON_W   = 80;
+    private static final int[] BUTTON_X = { 275, 150, 275, 150, 275, 175, 75 };
+    private static final int[] BUTTON_Y = { 580, 540, 500, 460, 380, 360, 380 };
+    private static final int BUTTON_W   = 60;
     private static final int BUTTON_H   = 30;
 
     // --- COLOURS ---
@@ -62,8 +62,13 @@ public class CameraSystem
         // IF AN IMAGE IS MISSING THE CAMERA WILL SHOW A PLACEHOLDER - NO CRASH
         cameras = new Camera[]
                 {
-                        new Camera("CAM 1 - SHOW STAGE",  "/cameras/showStage.png"),
-                        new Camera("CAM 2 - DINING AREA", "/cameras/diningArea.png"),
+                        new Camera("CAM 1 - THE HIVE",  "/cameras/theHive.png"),
+                        new Camera("CAM 2 - ANIMATION STUDIO", "/cameras/animationStudio.png"),
+                        new Camera("CAM 3 - HALLS RIGHT", "/cameras/hallsRight.png"),
+                        new Camera("CAM 4 - STUDENT LOUNGE", "/cameras/studentLounge.png"),
+                        new Camera("CAM 5 - HALLS LEFT", "/cameras/hallsLeft.png"),
+                        new Camera("CAM 6 - EMERGENCY EXIT", "/cameras/emergencyExit.png"),
+                        new Camera("CAM 7 - LIBRARY", "/cameras/library.png"),
                 };
 
         currentCamera = 0;

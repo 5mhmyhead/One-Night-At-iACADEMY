@@ -1,4 +1,4 @@
-package components;
+package components.office;
 
 import main.GamePanel;
 import utilities.Utility;
@@ -6,10 +6,7 @@ import utilities.Utility;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -67,8 +64,8 @@ public class OfficeView
         ventImage     = loadImage("/office/vent.png");
 
         // PRE-COMPUTE BLURRED VERSIONS SO WE DON'T BLUR EVERY FRAME
-        if(officeImage != null) blurredOffice = applyBlur(officeImage);
-        if(ventImage   != null) blurredVent   = applyBlur(ventImage);
+        if(officeImage != null) blurredOffice = Utility.applyBlur(officeImage);
+        if(ventImage   != null) blurredVent   = Utility.applyBlur(ventImage);
     }
 
     private BufferedImage loadImage(String path)
@@ -83,17 +80,6 @@ public class OfficeView
             System.out.println("Office image not found: " + path);
             return null;
         }
-    }
-
-    // PRE-BAKES A BLURRED VERSION OF THE IMAGE USING A 3x3 AVERAGE KERNEL
-    // CALLED ONCE IN init() — NOT EVERY FRAME
-    private BufferedImage applyBlur(BufferedImage image)
-    {
-        float[] matrix = new float[9];
-        Arrays.fill(matrix, 1.0f / 9.0f);
-        Kernel kernel     = new Kernel(3, 3, matrix);
-        ConvolveOp op     = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, null);
-        return op.filter(image, null);
     }
 
     // --- UPDATE ---
