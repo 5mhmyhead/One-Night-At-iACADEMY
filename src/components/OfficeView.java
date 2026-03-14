@@ -36,12 +36,17 @@ public class OfficeView
     private static final int BLUR_FRAMES = 8;
     private int blurTimer = 0;
 
-    // VENT HOVER ZONE — RIGHT EDGE OF THE SCREEN
-    private static final int HOVER_ZONE_X_MIN = GamePanel.WIDTH - 60;
-    private static final int HOVER_ZONE_X_MAX = GamePanel.WIDTH;
+    // MAIN VIEW HOVER ZONE — RIGHT SIDE (look right toward vent)
+    private static final int MAIN_HOVER_X_MIN = GamePanel.WIDTH - 60;
+    private static final int MAIN_HOVER_X_MAX = GamePanel.WIDTH;
 
-    private static final int HOVER_ZONE_Y_MIN  = (int)(GamePanel.HEIGHT * 0.20);
-    private static final int HOVER_ZONE_Y_MAX  = (int)(GamePanel.HEIGHT * 0.80);
+    // VENT VIEW HOVER ZONE — LEFT SIDE (look back left toward office)
+    private static final int VENT_HOVER_X_MIN = 0;
+    private static final int VENT_HOVER_X_MAX = 60;
+
+    // BOTH ZONES USE THE SAME Y RANGE
+    private static final int HOVER_ZONE_Y_MIN = (int)(GamePanel.HEIGHT * 0.20);
+    private static final int HOVER_ZONE_Y_MAX = (int)(GamePanel.HEIGHT * 0.80);
 
     private static final Color HOVER_HINT_COLOR = new Color(255, 255, 255, 40);
 
@@ -99,30 +104,23 @@ public class OfficeView
     }
 
     // --- INPUT ---
-
     public void mouseMoved(int mouseX, int mouseY)
     {
-        boolean inHoverZone = mouseX >= HOVER_ZONE_X_MIN
-                && mouseX <= HOVER_ZONE_X_MAX
+        int zoneXMin = ventMode ? VENT_HOVER_X_MIN : MAIN_HOVER_X_MIN;
+        int zoneXMax = ventMode ? VENT_HOVER_X_MAX : MAIN_HOVER_X_MAX;
+
+        boolean inHoverZone = mouseX >= zoneXMin
+                && mouseX <= zoneXMax
                 && mouseY >= HOVER_ZONE_Y_MIN
                 && mouseY <= HOVER_ZONE_Y_MAX;
 
-        // TOGGLE VENT MODE ON ZONE ENTRY
         if(inHoverZone && !wasInHoverZone)
         {
             ventMode  = !ventMode;
-            blurTimer = BLUR_FRAMES; // TRIGGER BLUR TRANSITION
+            blurTimer = BLUR_FRAMES;
         }
 
         wasInHoverZone = inHoverZone;
-    }
-
-    // CALLED BY GameState WHEN MASK OR CAMERA COMES UP
-    public void forceNormalView()
-    {
-        ventMode       = false;
-        wasInHoverZone = false;
-        blurTimer      = 0;
     }
 
     // --- DRAWING ---
@@ -195,10 +193,21 @@ public class OfficeView
     // HOVER ZONE AT THE RIGHT OF THE SCREEN
     private void drawHoverZone(Graphics2D g)
     {
+        int zoneXMin = ventMode ? VENT_HOVER_X_MIN : MAIN_HOVER_X_MIN;
+        int zoneXMax = ventMode ? VENT_HOVER_X_MAX : MAIN_HOVER_X_MAX;
+
         g.setColor(HOVER_HINT_COLOR);
-        g.fillRect(HOVER_ZONE_X_MIN, HOVER_ZONE_Y_MIN,
-                HOVER_ZONE_X_MAX - HOVER_ZONE_X_MIN,
+        g.fillRect(zoneXMin, HOVER_ZONE_Y_MIN,
+                zoneXMax - zoneXMin,
                 HOVER_ZONE_Y_MAX - HOVER_ZONE_Y_MIN);
+    }
+
+    // CALLED BY GameState WHEN MASK OR CAMERA COMES UP
+    public void forceNormalView()
+    {
+        ventMode       = false;
+        wasInHoverZone = false;
+        blurTimer      = 0;
     }
 
     // --- GETTERS ---

@@ -45,14 +45,10 @@ public class MaskSystem
         wasInHoverZone = inHoverZone;
     }
 
-    public void draw(Graphics2D g)
+    public void draw(Graphics2D g, boolean showHints)
     {
-        if(maskUp)
-        {
-            drawMask(g);
-        }
-
-        drawHoverZone(g);
+        if(maskUp) drawMask(g);
+        if(showHints) drawHoverZone(g);
     }
 
     private void drawMask(Graphics2D g)

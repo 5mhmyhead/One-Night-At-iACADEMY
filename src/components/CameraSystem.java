@@ -39,7 +39,7 @@ public class CameraSystem
     // ADD A NEW ENTRY HERE WHEN YOU ADD A NEW CAMERA
     private static final int[] BUTTON_X = { 620, 750 };
     private static final int[] BUTTON_Y = { 580, 580 };
-    private static final int BUTTON_W   = 100;
+    private static final int BUTTON_W   = 80;
     private static final int BUTTON_H   = 30;
 
     // --- COLOURS ---
@@ -115,7 +115,7 @@ public class CameraSystem
         }
     }
 
-    public void draw(Graphics2D g)
+    public void draw(Graphics2D g, boolean showHints)
     {
         if(monitorUp)
         {
@@ -125,7 +125,7 @@ public class CameraSystem
             drawCameraLabel(g);
         }
 
-        drawHoverZone(g);
+        if(showHints) drawHoverZone(g);
     }
 
     private void drawCameraFeed(Graphics2D g)
@@ -172,15 +172,15 @@ public class CameraSystem
 
             // BUTTON BACKGROUND
             g.setColor(selected ? BUTTON_SELECTED : BUTTON_IDLE);
-            g.fillRoundRect(BUTTON_X[i], BUTTON_Y[i], BUTTON_W, BUTTON_H, 6, 6);
+            g.fillRect(BUTTON_X[i], BUTTON_Y[i], BUTTON_W, BUTTON_H);
 
             // BUTTON BORDER
             g.setColor(BUTTON_TEXT);
-            g.drawRoundRect(BUTTON_X[i], BUTTON_Y[i], BUTTON_W, BUTTON_H, 6, 6);
+            g.drawRect(BUTTON_X[i], BUTTON_Y[i], BUTTON_W, BUTTON_H);
 
             // BUTTON LABEL - SHOWS NUMBER KEY SHORTCUT + CAMERA NAME
             g.setFont(new Font("Monospaced", Font.BOLD, 11));
-            String label = (i + 1) + " - CAM " + (i + 1);
+            String label = "CAM " + (i + 1);
             int labelX = BUTTON_X[i] + (BUTTON_W - g.getFontMetrics().stringWidth(label)) / 2;
             int labelY = BUTTON_Y[i] + BUTTON_H / 2 + 4;
             g.setColor(BUTTON_TEXT);

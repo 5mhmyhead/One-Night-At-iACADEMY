@@ -56,27 +56,14 @@ public class GameState extends State
     @Override
     public void draw(Graphics2D g)
     {
-        int w = GamePanel.WIDTH;
-        int h = GamePanel.HEIGHT;
+        g.setColor(new Color(30, 25, 20));
+        g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
-        // Placeholder — replace with actual office rendering
-        g.setColor(new Color(30, 30, 30));
-        g.fillRect(0, 0, w, h);
+        boolean showHints = !office.isVentMode();
 
-        // Title
-        g.setColor(new Color(180, 0, 0));
-        g.setFont(new Font("Serif", Font.BOLD, 24));
-        Utility.drawCentered(g, "OFFICE VIEW", h / 2 - 30);
-
-        // Prompt
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Serif", Font.PLAIN, 12));
-        Utility.drawCentered(g, "Hover at the bottom to check the Cameras.", h / 2 + 10);
-
-
-        if(!cameraSystem.isMonitorUp()) mask.draw(g);
-        if(!mask.isMaskUp()) cameraSystem.draw(g);
         if(!cameraSystem.isMonitorUp() && !mask.isMaskUp()) office.draw(g);
+        if(!cameraSystem.isMonitorUp()) mask.draw(g, showHints);
+        if(!mask.isMaskUp()) cameraSystem.draw(g, showHints);
     }
 
     @Override
@@ -87,9 +74,17 @@ public class GameState extends State
 
     @Override public void mouseMoved(int x, int y)
     {
-        if(!mask.isMaskUp()) cameraSystem.mouseMoved(x, y);
-        if(!cameraSystem.isMonitorUp()) mask.mouseMoved(x, y);
-        if(!cameraSystem.isMonitorUp() && !mask.isMaskUp()) office.mouseMoved(x, y);
+        boolean wasCameraUp = cameraSystem.isMonitorUp();
+        boolean wasMaskUp   = mask.isMaskUp();
+
+        boolean mainView = !cameraSystem.isMonitorUp() && !mask.isMaskUp();
+
+        if(!mask.isMaskUp() && !office.isVentMode()) cameraSystem.mouseMoved(x, y);
+        if(!cameraSystem.isMonitorUp() && !office.isVentMode()) mask.mouseMoved(x, y);
+        if(mainView) office.mouseMoved(x, y);
+
+        if(cameraSystem.isMonitorUp() && !wasCameraUp) office.forceNormalView();
+        if(mask.isMaskUp() && !wasMaskUp) office.forceNormalView();
     }
 
     @Override public void mouseClicked(int x, int y) { cameraSystem.mouseClicked(x, y); }
