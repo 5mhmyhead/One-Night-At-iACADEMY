@@ -5,6 +5,7 @@ import main.GamePanel;
 import state.State;
 import state.StateManager;
 import components.CameraSystem;
+import components.OfficeView;
 import utilities.Utility;
 
 import java.awt.*;
@@ -28,6 +29,7 @@ public class GameState extends State
 {
     private CameraSystem cameraSystem;
     private MaskSystem mask;
+    private OfficeView office;
 
     public GameState(StateManager stateManager)
     {
@@ -39,6 +41,7 @@ public class GameState extends State
     public void init()
     {
         cameraSystem = new CameraSystem();
+        office = new OfficeView();
         mask = new MaskSystem();
     }
 
@@ -47,6 +50,7 @@ public class GameState extends State
     {
         cameraSystem.update();
         mask.update();
+        office.update();
     }
 
     @Override
@@ -72,6 +76,7 @@ public class GameState extends State
 
         if(!cameraSystem.isMonitorUp()) mask.draw(g);
         if(!mask.isMaskUp()) cameraSystem.draw(g);
+        if(!cameraSystem.isMonitorUp() && !mask.isMaskUp()) office.draw(g);
     }
 
     @Override
@@ -84,6 +89,7 @@ public class GameState extends State
     {
         if(!mask.isMaskUp()) cameraSystem.mouseMoved(x, y);
         if(!cameraSystem.isMonitorUp()) mask.mouseMoved(x, y);
+        if(!cameraSystem.isMonitorUp() && !mask.isMaskUp()) office.mouseMoved(x, y);
     }
 
     @Override public void mouseClicked(int x, int y) { cameraSystem.mouseClicked(x, y); }
