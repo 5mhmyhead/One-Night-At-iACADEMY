@@ -6,21 +6,6 @@ import utilities.Utility;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * CameraSystem.java
- * Owns everything related to the camera tablet:
- *   - Whether the monitor is up or down (monitorUp)
- *   - Which camera feed is currently displayed (currentCamera)
- *   - Drawing the camera feed and the camera selector UI
- *
- * TOGGLING:    Mouse hovering over the bottom strip of the screen
- * SWITCHING:   Click a camera button on the UI, OR press number keys
- *
- * TO ADD MORE CAMERAS:
- *   1. Add a new Camera to the cameras[] array in init()
- *   2. Add a new button position to BUTTON_X[] and BUTTON_Y[]
- *   That's it — draw() and handleClick() scale automatically.
- */
 public class CameraSystem
 {
     private boolean monitorUp = false;
@@ -38,7 +23,7 @@ public class CameraSystem
     // BUTTON POSITIONS FOR THE CAMERA SELECTOR UI
     // ADD A NEW ENTRY HERE WHEN YOU ADD A NEW CAMERA
     private static final int[] BUTTON_X = { 275, 150, 275, 150, 275, 175, 75 };
-    private static final int[] BUTTON_Y = { 580, 540, 500, 460, 380, 360, 380 };
+    private static final int[] BUTTON_Y = { 580, 540, 500, 460, 420, 360, 380 };
     private static final int BUTTON_W   = 60;
     private static final int BUTTON_H   = 30;
 
@@ -64,9 +49,9 @@ public class CameraSystem
                 {
                         new Camera("CAM 1 - THE HIVE",  "/cameras/theHive.png"),
                         new Camera("CAM 2 - ANIMATION STUDIO", "/cameras/animationStudio.png"),
-                        new Camera("CAM 3 - HALLS RIGHT", "/cameras/hallsRight.png"),
+                        new Camera("CAM 3 - HALLS", "/cameras/halls.png"),
                         new Camera("CAM 4 - STUDENT LOUNGE", "/cameras/studentLounge.png"),
-                        new Camera("CAM 5 - HALLS LEFT", "/cameras/hallsLeft.png"),
+                        new Camera("CAM 5 - LEARNING ROOM", "/cameras/learningRoom.png"),
                         new Camera("CAM 6 - EMERGENCY EXIT", "/cameras/emergencyExit.png"),
                         new Camera("CAM 7 - LIBRARY", "/cameras/library.png"),
                 };
@@ -111,12 +96,17 @@ public class CameraSystem
     {
         if(!monitorUp) return;
 
-        // NUMBER KEYS 1-9 SWITCH CAMERAS DIRECTLY
-        // VK_1 = 49, VK_2 = 50... SO WE SUBTRACT 49 TO GET THE INDEX
-        int index = key - KeyEvent.VK_1;
-        if(index >= 0 && index < cameras.length)
+        // USE THE A AND D KEYS TO MOVE BETWEEN CAMERAS
+        if(key == KeyEvent.VK_A)
         {
-            currentCamera = index;
+            if(currentCamera != 0) currentCamera = currentCamera - 1;
+            else currentCamera = cameras.length - 1;
+        }
+
+        if(key == KeyEvent.VK_D)
+        {
+            if(currentCamera != cameras.length - 1) currentCamera = currentCamera + 1;
+            else currentCamera = 0;
         }
     }
 
@@ -144,7 +134,15 @@ public class CameraSystem
         if(cam.getImage() != null)
         {
             // DRAW THE CAMERA IMAGE SCALED TO FILL THE SCREEN
-            g.drawImage(cam.getImage(), 0, 0, GamePanel.WIDTH, GamePanel.HEIGHT, null);
+            double scale = Math.max((double) GamePanel.WIDTH / cam.getImage().getWidth(),
+                    (double) GamePanel.HEIGHT / cam.getImage().getHeight());
+
+            int drawW = (int)(cam.getImage().getWidth() * scale);
+            int drawH = (int)(cam.getImage().getHeight() * scale);
+            int drawX = (GamePanel.WIDTH - drawW) / 2;
+            int drawY = (GamePanel.HEIGHT - drawH) / 2;
+
+            g.drawImage(cam.getImage(), drawX, drawY, drawW, drawH, null);
         }
         else
         {
@@ -184,7 +182,8 @@ public class CameraSystem
             g.drawRect(BUTTON_X[i], BUTTON_Y[i], BUTTON_W, BUTTON_H);
 
             // BUTTON LABEL - SHOWS NUMBER KEY SHORTCUT + CAMERA NAME
-            g.setFont(new Font("Monospaced", Font.BOLD, 11));
+            g.setFont(new Font("Monospaced", Font.BOLD, 14
+            ));
             String label = "CAM " + (i + 1);
             int labelX = BUTTON_X[i] + (BUTTON_W - g.getFontMetrics().stringWidth(label)) / 2;
             int labelY = BUTTON_Y[i] + BUTTON_H / 2 + 4;

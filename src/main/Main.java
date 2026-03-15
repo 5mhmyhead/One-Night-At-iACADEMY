@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Main
 {
     public static JFrame window;
-    static void main() { new Main().startGame(); }
+    public static void main(String[] args) { new Main().startGame(); }
 
     public void startGame()
     {
